@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>San Valentín Retro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fuente retro estilo pixel art -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Press Start 2P', cursive;
+      background: black;
+      color: white;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .pantalla {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+    }
+    .pantalla.activa {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      max-width: 90%;
+      animation: floatCard 4s ease-in-out infinite;
+      z-index: 10;
+      font-family: 'Press Start 2P', cursive;
+      color: #d6336c;
+    }
+    @keyframes floatCard {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    button {
+      background: #d6336c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8em;
+      font-family: 'Press Start 2P', cursive;
+    }
+    button:hover { background: #a61e4d; }
+    #noBtn { background: #555; }
+    .mensajeFinal {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      max-width: 90%;
+      font-size: 1em;
+      color: #d6336c;
+      animation: aparecer 3s ease forwards;
+      white-space: pre-line;
+      font-family: 'Press Start 2P', cursive;
+    }
+    @keyframes aparecer {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .heart {
+      position: absolute;
+      color: #d6336c;
+      animation: float 6s linear infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-10vh); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Pantalla 1: estilo Nintendo -->
+  <div id="pantalla1" class="pantalla activa" onclick="iniciar()">
+    <h1>🎮 PRESIONA LA PANTALLA PARA COMENZAR</h1>
+    <p style="font-size:0.6em;">(Juguemos)</p>
+    <audio id="musica" loop>
+      <source src="marioworld.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <!-- Pantalla 2: pregunta -->
+  <div id="pantalla2" class="pantalla">
+    <div class="card">
+      <h1>¿QUIERES SER MI SAN VALENTÍN? ❤️</h1>
+      <button onclick="mostrarPantalla(3)">SÍ</button>
+      <button id="noBtn">NO</button>
+    </div>
+  </div>
+
+  <!-- Pantalla 3: mensaje final -->
+  <div id="pantalla3" class="pantalla">
+    <div class="mensajeFinal">
+      ADRIANA, QUIERO SEGUIR CAMINANDO CONTIGO,  
+      CONSTRUIR JUNTOS CADA DÍA,  
+      Y QUE ESTE SAN VALENTÍN SEA SOLO EL INICIO  
+      DE MUCHOS MÁS A TU LADO, TE QUIERO 💕
+    </div>
+  </div>
+
+  <script>
+    function iniciar() {
+      mostrarPantalla(2);
+      document.getElementById('musica').play(); // arranca la música al primer toque
+    }
+
+    function mostrarPantalla(num) {
+      document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+      document.getElementById('pantalla' + num).classList.add('activa');
+    }
+
+    // Botón No que se escapa
+    const noBtn = document.getElementById('noBtn');
+    noBtn.addEventListener('mouseover', () => {
+      const x = Math.floor(Math.random() * (window.innerWidth - 100));
+      const y = Math.floor(Math.random() * (window.innerHeight - 100));
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    });
+
+    // Corazones flotando
+    function crearCorazon() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerText = "❤️";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.fontSize = (20 + Math.random() * 30) + "px";
+      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(crearCorazon, 800);
+  </script>
+</body>
+</html>
